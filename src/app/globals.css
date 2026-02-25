@@ -1,26 +1,187 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import 'tailwindcss';
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+  --color-gold: #c9a96e;
+  --color-gold-light: #e8d5a8;
+  --color-gold-dark: #8b7340;
+  --color-cosmic-bg: #020010;
+  --color-cosmic-deep: #0a0520;
+  --color-nebula-purple: #1a0a2e;
+  --color-nebula-blue: #0d1b3e;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cosmic-bg);
+  color: #ededed;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Скрываем скроллбар */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Плавный отклик звёзд */
+.star {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Мерцание звёзд */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--star-opacity);
+  }
+  50% {
+    opacity: calc(var(--star-opacity) * 0.3);
+  }
+}
+
+@keyframes twinkle-alt {
+  0%,
+  100% {
+    opacity: var(--star-opacity);
+  }
+  33% {
+    opacity: calc(var(--star-opacity) * 0.15);
+  }
+  66% {
+    opacity: calc(var(--star-opacity) * 0.85);
+  }
+}
+
+/* Пульсация золотого кольца */
+@keyframes ring-pulse {
+  0%,
+  100% {
+    opacity: 0.08;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.02);
+  }
+}
+
+@keyframes ring-pulse-reverse {
+  0%,
+  100% {
+    opacity: 0.06;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.12;
+    transform: translate(-50%, -50%) rotate(-180deg) scale(0.98);
+  }
+}
+
+/* Градиентная линия */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Появление контента */
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Дыхание nebula */
+@keyframes nebula-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes nebula-breathe-alt {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1.05);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 1.2s ease-out forwards;
+}
+
+.animate-fade-up-delay-1 {
+  animation: fade-up 1.2s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.animate-fade-up-delay-2 {
+  animation: fade-up 1.2s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+.animate-fade-up-delay-3 {
+  animation: fade-up 1.2s ease-out 0.9s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-slow {
+  animation: fade-in 2.5s ease-out 1.2s forwards;
+  opacity: 0;
+}
+
+/* Золотая линия shimmer */
+.shimmer-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-gold-dark) 25%,
+    var(--color-gold) 50%,
+    var(--color-gold-dark) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
 }
