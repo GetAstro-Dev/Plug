@@ -47,3 +47,13 @@ export interface StarData {
   twinkleDuration: number
   twinkleType: 'twinkle' | 'twinkle-alt'
 }
+
+export interface SeoLayout {
+  title: string
+  description: string
+}
+
+export const SEO_DEFAULT: SeoLayout = {
+  title: 'GetAstro — Натальные карты и гороскопы',
+  description: 'Готовим вашу натальную карту. Звёзды уже выстраиваются.',
+}
