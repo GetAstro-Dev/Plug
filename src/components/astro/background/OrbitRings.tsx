@@ -1,12 +1,21 @@
 'use client'
 
 import { forwardRef } from 'react'
+import { useResponsive } from '@/hooks/useResponsive'
 
 // Принимаем (HTMLDivElement | null)[] чтобы избежать конфликта типов
 export const OrbitRings = forwardRef<(HTMLDivElement | null)[]>((_, ref) => {
+  const { windowSize, isMobile, isTablet } = useResponsive()
+  
+  const baseSizes = isMobile 
+    ? [windowSize.width * 0.7, windowSize.width * 1.0, windowSize.width * 1.4] 
+    : isTablet 
+      ? [400, 550, 750] 
+      : [550, 700, 900]
+
   return (
     <div className="absolute inset-0 z-1 pointer-events-none">
-      {[550, 700, 900].map((size, i) => (
+      {baseSizes.map((size, i) => (
         <div
           key={size}
           ref={(el) => {

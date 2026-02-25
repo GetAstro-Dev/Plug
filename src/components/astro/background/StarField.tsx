@@ -33,7 +33,7 @@ export const StarField = forwardRef< (HTMLDivElement | null)[], StarFieldProps >
             ['--star-opacity' as string]: star.opacity,
             backgroundColor:
               star.layer === 2 ? '#D2BE96' : star.layer === 1 ? '#DCDC0F0' : '#FFFFFF',
-            animation: `${star.twinkleType} ${4 + Math.random() * 6}s ease-in-out ${star.twinkleDelay}s infinite`,
+            animation: `${star.twinkleType} ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite`,
           }}
         />
       ))}

@@ -10,6 +10,7 @@
   --color-cosmic-deep: #0a0520;
   --color-nebula-purple: #1a0a2e;
   --color-nebula-blue: #0d1b3e;
+  --breakpoint-xs: 480px;
 }
 
 * {
@@ -21,7 +22,7 @@
 html,
 body {
   overflow: hidden;
-  height: 100%;
+  height: 100dvh;
   width: 100%;
 }
 

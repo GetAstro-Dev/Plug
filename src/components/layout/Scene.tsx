@@ -1,7 +1,7 @@
 'use client'
 
 import gsap from 'gsap'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { STAR_LAYERS, StarData, HeroContent } from '@/constants/astro-config'
 import { Nebula } from '../astro/background/Nebula'
 import { OrbitRings } from '../astro/background/OrbitRings'
@@ -19,10 +19,13 @@ export default function Scene({ content }: SceneProps) {
   const starsRef = useRef<(HTMLDivElement | null)[]>([])
   const parallaxLayersRef = useRef<(HTMLDivElement | null)[]>([])
   const quickToMap = useRef<Map<number, { x: gsap.QuickToFunc; y: gsap.QuickToFunc }>>(new Map())
-  const mousePos = useRef({ x: 0, y: 0 })
+  const mousePos = useRef({ 
+    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, 
+    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 
+  })
   const rafId = useRef<number>(0)
 
-  const starsData = useMemo<StarData[]>(() => {
+  const [starsData] = useState<StarData[]>(() => {
     const stars: StarData[] = []
     STAR_LAYERS.forEach((layer, layerIdx) => {
       for (let i = 0; i < layer.count; i++) {
@@ -33,12 +36,13 @@ export default function Scene({ content }: SceneProps) {
           opacity: Math.random() * 0.6 + 0.2,
           layer: layerIdx,
           twinkleDelay: Math.random() * 8,
+          twinkleDuration: 4 + Math.random() * 6,
           twinkleType: Math.random() > 0.5 ? 'twinkle' : 'twinkle-alt',
         })
       }
     })
     return stars
-  }, [])
+  })
 
   const initQuickTo = useCallback(() => {
     quickToMap.current.clear()
@@ -60,10 +64,11 @@ export default function Scene({ content }: SceneProps) {
     const parallaxTweens = parallaxLayersRef.current
       .map((layer, i) => {
         if (!layer) return null
+        const isMobile = window.innerWidth < 640
         return {
           x: gsap.quickTo(layer, 'x', { duration: 1.2, ease: 'power2.out' }),
           y: gsap.quickTo(layer, 'y', { duration: 1.2, ease: 'power2.out' }),
-          factor: (i + 1) * 8,
+          factor: ((i + 1) * 8) * (isMobile ? 0.5 : 1),
         }
       })
       .filter(Boolean)
@@ -113,7 +118,18 @@ export default function Scene({ content }: SceneProps) {
       }
     }
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mousePos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        if (!ticking) {
+          ticking = true
+          rafId.current = requestAnimationFrame(processMouseMove)
+        }
+      }
+    }
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
 
     starsRef.current.forEach((star, i) => {
       if (!star) return
@@ -125,6 +141,7 @@ export default function Scene({ content }: SceneProps) {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('touchmove', handleTouchMove)
       cancelAnimationFrame(rafId.current)
     }
   }, [starsData, initQuickTo])
